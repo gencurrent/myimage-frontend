@@ -9,12 +9,20 @@ import {
 
 import AppSwitch from './AppSwitch';
 
+import Logo from 'resources/logo.png';
+
 class MainTemplate extends React.Component {
     render(){
         return (
             <Router>
                 <header className="header">
                     <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                        <div className="brand">
+
+                            <Link className="navbar-brand" to="/">
+                                <img height="30" src={Logo}/>
+                            </Link>
+                        </div>
 
                         <div className="collapse navbar-collapse">
                             <ul className="navbar-nav mr-auto">
