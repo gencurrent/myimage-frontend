@@ -7,6 +7,7 @@ import 'react-image-crop/dist/ReactCrop.css';
 class Cropper extends React.Component {
 
     static propTypes = {
+        className: PropTypes.string,
         image: PropTypes.string.isRequired,
         format: PropTypes.object.isRequired,
         onCroppingUpdated: PropTypes.func.isRequired,
@@ -83,9 +84,10 @@ class Cropper extends React.Component {
 
     render(){
         // console.log(`Cropper -> props`, this.props)
+        
         return (
-            <div className='crop-box'>
-                <button onClick={this.removeCropper}>Remove</button>
+            <div className={`crop-box ${this.props.className || ''}`}>
+                <button className="btn btn-danger" onClick={this.removeCropper}>Remove</button>
                 {this.props.image && 
                     <ReactCrop
                         ref={this.reactCrop}

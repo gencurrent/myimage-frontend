@@ -67,9 +67,11 @@ class DragAndDrop extends React.Component {
     }
 
     render(){
+        console.log(`this.props -> `, this.props)
+        const {className} = this.props || '';
         return (
             <div 
-                className='file-upload-box'
+                className={`file-upload-box ${className}`}
                 ref={this.dropRef}>
                 {this.state.dragging &&
                 <div
@@ -104,6 +106,8 @@ class DragAndDrop extends React.Component {
             </div>
         )
     }
-}
+};
+
+
 
 export default DragAndDrop;

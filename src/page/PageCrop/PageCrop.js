@@ -127,69 +127,83 @@ class PageCrop extends React.Component {
     render(){
         return (
         
-            <div>
-                <div>
-                    Please, upload a file below
-                </div>
-                <div>
-                    <DragAndDrop handleDrop={this.handleDrop}>
-                        <div style={{'min-height': '300px', 'min-width': '250px'}}>
-                            { this.state.fileRaw && 
-                            <img className="drop-box_image-loaded" />
+            <div className="container">
+                <div className="row">
+                    <div className="col-lg-12 text-center">
+                        
+                        <div>
+                            Please, upload a file below
+                        </div>
+                        <div className="mx-auto">
+                            <DragAndDrop className="mx-auto" handleDrop={this.handleDrop}>
+                                <div style={{'min-height': '300px', 'min-width': '250px'}}>
+                                    { this.state.fileRaw && 
+                                    <img className="drop-box_image-loaded" />
+                                    }
+                                </div>
+                            </DragAndDrop>
+                        </div>
+
+                        <div>
+                            Crop the file below
+                        </div>
+
+                        {this.state.file && 
+                            this.formats.map(format => 
+                                <button 
+                                    key={format.name}
+                                    onClick={e => this.addCropper(format.name)}
+                                >
+                                    Add {format.name}
+                                </button>
+                                
+                            )
+                        }
+
+                        <div>
+                            { this.state.file &&  this.state.croppers &&
+                                Object.keys(this.state.croppers).map(cropperUuid => {
+                                    console.log(this.state.croppers);
+                                    const cropper = this.state.croppers[cropperUuid];
+                                    console.log(`Cropper udpated ->`, cropper);
+                                    let formatSelection = this.formats.find(e => (e.name === cropper.format.name))
+                                    console.log(formatSelection);
+                                    return (
+
+                                        <div className="row">
+                                            <div className="col-lg-12">
+                                            
+                                                <Cropper 
+                                                    className="mx-auto"
+                                                    image={this.state.file}
+                                                    format={cropper.format}
+                                                    uuid={cropperUuid}
+                                                    onCroppingUpdated={this.onCroppingUpdated}
+                                                    removeCropper={this.removeCropper}
+                                                // getCropInfo={this.getCropInfo}
+                                                />
+                                                
+                                            </div>
+                                        </div>
+                                    )
+                                })
                             }
                         </div>
-                    </DragAndDrop>
-                </div>
-
-                <div>
-                    Crop the file below
-                </div>
-
-                {this.state.file && 
-                    this.formats.map(format => 
+                        <div>
+                            Download the file
+                        </div>
                         <button 
-                            key={format.name}
-                            onClick={e => this.addCropper(format.name)}
+                            disabled={this.state.file === null}
+                            onClick={this.handleDownload}
                         >
-                            Add {format.name}
+                            Crop
                         </button>
-                        
-                    )
-                }
 
-                <div>
-                    { this.state.file &&  this.state.croppers &&
-                        Object.keys(this.state.croppers).map(cropperUuid => {
-                            console.log(this.state.croppers);
-                            const cropper = this.state.croppers[cropperUuid];
-                            console.log(`Cropper udpated ->`, cropper);
-                            let formatSelection = this.formats.find(e => (e.name === cropper.format.name))
-                            console.log(formatSelection);
-                            return (
 
-                                <Cropper 
-                                    image={this.state.file}
-                                    format={cropper.format}
-                                    uuid={cropperUuid}
-                                    onCroppingUpdated={this.onCroppingUpdated}
-                                    removeCropper={this.removeCropper}
-                                // getCropInfo={this.getCropInfo}
-                            />
-                            )
-                        })
-                    }
-                </div>
-                <div>
-                    Download the file
-                </div>
-                <button 
-                    disabled={this.state.file === null}
-                    onClick={this.handleDownload}
-                >
-                    Crop
-                </button>
 
                 
+                    </div>
+                </div>
             </div>
         )
     }
