@@ -2,8 +2,10 @@ import axios from 'axios';
 // import Cookies from 'universal-cookie';
 
 
-export const initSystem = async () => {
-    axios.get('http://127.0.0.1:3000/api/system',)
+
+export const setAxiosDefaults = () => {
+    axios.defaults.baseURL = 'http://192.168.1.63:3000';
+    axios.get(`/api/system`,)
         .then(response => {
             // const cookies = new Cookies();
             // console.log(response)
@@ -12,4 +14,9 @@ export const initSystem = async () => {
             // console.log(cookies.get('X-Client-UUID'));
             // console.log(`Initialized system cookies`)
         })
+}
+
+
+export const initSystem = () => {
+    
 }

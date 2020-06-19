@@ -1,5 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
+import $ from 'jquery';
 
 import store from './redux';
 
@@ -8,11 +9,13 @@ import MainTemplate from 'template/MainTemplate';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
-import {initSystem} from './system';
+import {initSystem, setAxiosDefaults } from './system';
 
 initSystem();
+setAxiosDefaults();
 
 function App() {
+  window.$ = window.jQuery = require('jquery');
   return (
     <Provider store={store}>
       

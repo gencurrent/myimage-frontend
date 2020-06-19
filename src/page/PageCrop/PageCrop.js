@@ -59,25 +59,26 @@ class PageCrop extends React.Component {
             croppers: croppers
         });
 
-        axios.put('http://127.0.0.1:3000/api/cropper/crop-data',
+        axios.put('/api/cropper/crop-data',
             Object.keys(croppers).map(cropper => croppers[cropper].crop)
         )
             .then(response => {
                 console.log(`onCroppingUpdated ->`, response)
-                let croppers = this.state.croppers;
+                // let croppers = this.state.croppers;
             })
     }
 
     addCropper = (formatName) => {
         const formatSelection = this.formats.find(e => e.name === formatName)
         console.log(`Added the format`, formatSelection);
-        let croppers = this.state.croppers;
-        axios.post('http://127.0.0.1:3000/api/cropper/crop-data',
+        // let croppers = this.state.croppers;
+        axios.post('/api/cropper/crop-data',
         {
             format: formatSelection
         }
         )
             .then(response => {
+
                 console.log(`onCroppingUpdated ->`, response)
                 let croppers = this.state.croppers;
                 const uuidResponse = response.data.uuid;
@@ -87,6 +88,9 @@ class PageCrop extends React.Component {
                 this.setState({
                     croppers: croppers
                 })
+            })
+            .catch(err => {
+                
             })
     }
 
@@ -110,7 +114,7 @@ class PageCrop extends React.Component {
         let formData = new FormData();
         formData.append('image', this.state.fileRaw);
         axios.post(
-            'http://127.0.0.1:3000/api/cropper/crop-image', 
+            '/api/cropper/crop-image', 
             formData, 
             {
                 headers: {
@@ -138,7 +142,7 @@ class PageCrop extends React.Component {
                             <DragAndDrop className="mx-auto" handleDrop={this.handleDrop}>
                                 <div style={{'min-height': '300px', 'min-width': '250px'}}>
                                     { this.state.fileRaw && 
-                                    <img className="drop-box_image-loaded" />
+                                    <img alt="uploaded image" className="drop-box_image-loaded" />
                                     }
                                 </div>
                             </DragAndDrop>
@@ -150,8 +154,9 @@ class PageCrop extends React.Component {
 
                         {this.state.file && 
                             this.formats.map(format => 
-                                <button 
+                                <button
                                     key={format.name}
+                                    className='btn btn-primary' 
                                     onClick={e => this.addCropper(format.name)}
                                 >
                                     Add {format.name}

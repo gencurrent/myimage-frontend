@@ -1,16 +1,32 @@
 
 
 .file-upload-box {
-  max-width: 400px;
-  max-height: 250px;
+  width: 400px;
+  height: 250px;
   border: dashed 4px grey;
-  
+  position: static;
 }
 
-.crop-box {
+.file-upload-box_when_dropping {
+  border: dashed grey 4px;
+  background-color: rgba(255,255,255,.8);
+  position: static;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
 
 .drop-box_image-loaded {
   max-height: 100%;
   max-width: 100%;
+}
+.select-image-button {
+  position: absolute;
+  display: block;
+  margin: auto;
+}
+.crop-box {
 }

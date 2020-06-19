@@ -37,13 +37,27 @@ class DragAndDrop extends React.Component {
         e.preventDefault();
         e.stopPropagation();
         this.setState({dragging: false});
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0){
+        if (e.dataTransfer.files && e.dataTransfer.files){
             const reader = new FileReader();
             console.log('e.dataTransfer.files[0] = ', e.dataTransfer.files[0])
             reader.addEventListener('load', () =>
                 this.props.handleDrop(reader.result, e.dataTransfer.files[0])
             );
             reader.readAsDataURL(e.dataTransfer.files[0]);
+            this.dragCounter = 0;
+        }
+    }
+    handleImageSelect = e => {
+        e.preventDefault();
+        this.setState({dragging: false});
+        if (e.target && e.target.files) {
+            let files = e.target.files;
+            console.log(`DragAndDrop -> Handling image drop`, files);
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+                this.props.handleDrop(reader.result, files[0]);
+            });
+            reader.readAsDataURL(files[0]);
             this.dragCounter = 0;
         }
     }
@@ -74,18 +88,7 @@ class DragAndDrop extends React.Component {
                 className={`file-upload-box ${className}`}
                 ref={this.dropRef}>
                 {this.state.dragging &&
-                <div
-                    style={{
-                    border: 'dashed grey 4px',
-                    backgroundColor: 'rgba(255,255,255,.8)',
-                    position: 'relative',
-                    display: 'block',
-                    top: 0,
-                    bottom: 0,
-                    left: 0, 
-                    right: 0,
-                    zIndex: 9999
-                    }}
+                <div className='file-upload-box_when_dropping'
                 >
                     <div 
                     style={{
@@ -102,6 +105,12 @@ class DragAndDrop extends React.Component {
                     </div>
                 </div>
                 }
+                 <input
+                    className='select-image-button'
+                    type="file"
+                    // style={{ display: "none" }}
+                    onChange={this.handleImageSelect}
+                />
                 {this.props.children}
             </div>
         )
