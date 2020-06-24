@@ -3,24 +3,34 @@ import PropTypes from 'prop-types';
 import ReactCrop from 'react-image-crop';
 
 import 'react-image-crop/dist/ReactCrop.css';
+import Select from 'react-select';
 
 class Cropper extends React.Component {
 
     static propTypes = {
         className: PropTypes.string,
         image: PropTypes.string.isRequired,
-        format: PropTypes.object.isRequired,
+        formats: PropTypes.array,
+        onCropRequiredClicked: PropTypes.func,
         onCroppingUpdated: PropTypes.func.isRequired,
         uuid: PropTypes.string,
-        removeCropper: PropTypes.func,
+        onCropperRemoveButtonClicked: PropTypes.func,
+        removeButton: PropTypes.bool,
     }
 
     constructor(props){
         super(props);
-        console.log(`Croppper -> props`, this.props);
+        this.defaultCropProperties = {
+            unit: '%',
+            width: 30,
+        }
+        
+        this.formatSelectOptions = this.formFormatOptions();
+        const formatOptionDefault = this.formatSelectOptions[0];
         this.state = {
+            selectedFormatOption: formatOptionDefault,
             crop: {
-                aspect: this.props.format.aspect,
+                aspect: this.formatOptionToFormat(formatOptionDefault).aspect,
                 unit: '%',
                 width: 30,
             }
@@ -29,13 +39,26 @@ class Cropper extends React.Component {
         this.reactCrop = React.createRef();
 
         this.updateCrop = this.updateCrop.bind(this);
+        this.downloadThisCrop = this.downloadThisCrop.bind(this);
         this.removeCropper = this.removeCropper.bind(this);
         // this.onLoad = this.onLoad.bind(this);
 
     }
 
+    formFormatOptions = () => {
+        return this.props.formats.map(format => {
+            return {
+            value: format.slug,
+            label: format.name,
+        }});
+    }
+
+    formatOptionToFormat = selectedOption => {
+        return this.props.formats.find(format => format.slug == selectedOption.value);
+    }
+
     removeCropper = e => {
-        this.props.removeCropper && this.props.removeCropper(this.props.uuid);
+        this.props.onCropperRemoveButtonClicked && this.props.onCropperRemoveButtonClicked(this.props.uuid);
     }
 
     // onLoad = img => {
@@ -70,8 +93,6 @@ class Cropper extends React.Component {
         this.setState(
             {crop: newCrop}, 
             () => {
-                console.log(`Croppping updated`);
-                console.log(this.reactCrop.current.imageRef)
                 const fullData = {
                     ...this.state.crop,
                     image_height: this.reactCrop.current.imageRef.clientHeight,
@@ -82,12 +103,47 @@ class Cropper extends React.Component {
         );
     }
 
+    downloadThisCrop = () => {
+
+        const fullData = {
+            ...this.state.crop,
+            image_height: this.reactCrop.current.imageRef.clientHeight,
+            image_width: this.reactCrop.current.imageRef.clientWidth,
+        }
+        this.props.onCropRequiredClicked(this.props.uuid, fullData);
+    }
+
+    selectFormat = selectedFormatOption => {
+        const crop = {
+            ...this.defaultCropProperties,
+            aspect: this.formatOptionToFormat(selectedFormatOption).aspect
+        }
+        this.setState({
+            selectedFormatOption: selectedFormatOption,
+            crop: crop
+        },
+        () => {
+            this.reactCrop.current.forceUpdate();
+        }
+        );
+    }
+
     render(){
-        // console.log(`Cropper -> props`, this.props)
-        
         return (
             <div className={`crop-box ${this.props.className || ''}`}>
-                <button className="btn btn-danger" onClick={this.removeCropper}>Remove</button>
+                <div className='crop-box-controls d-flex flex-row'>
+                    { (this.props.formats.length > 1) && this.formatSelectOptions && 
+                        <Select 
+                            className='col-lg-10 col-sm-10'
+                            options={this.formatSelectOptions}
+                            value={this.state.selectedFormatOption}
+                            onChange={this.selectFormat}
+                        />
+                    }
+                    {this.props.removeButton && 
+                        <button className=" col-lg-2 col-sm-2 btn btn-danger p-2" onClick={this.removeCropper}>Remove</button>
+                    }
+                </div>
                 {this.props.image && 
                     <ReactCrop
                         ref={this.reactCrop}
@@ -97,9 +153,8 @@ class Cropper extends React.Component {
                         // onImageLoaded={this.onLoad}
                     />
                 }
-                <buton>
-                    Download crop
-                </buton>
+                <button className='btn btn-primary' onClick={this.downloadThisCrop}>Download this crop
+                </button>
             </div>
         )
     }

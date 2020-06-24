@@ -1,21 +1,81 @@
 
 
+ /* Main page */
+
+ /* .main-title {
+   font-weight: 12px;
+ } */
+
+ body a,p {
+   color: #181818;
+ }
+
+h1 {
+  font-size: 30px;
+  font-weight: 550;
+}
+
+h2 {
+  font-size: 26px;
+}
+
+.subtitle {
+  font-weight: 18px;
+}
+
+p.large {
+  font-size: 22px;
+}
+
+
+a.link-unstyled {
+  text-decoration: none;
+}
+
+
 .file-upload-box {
-  width: 400px;
-  height: 250px;
+  /* width: 400px; */
+  height: 150px;
   border: dashed 4px grey;
   position: static;
+}
+
+.service-description {
+  border-radius: 4px;
+  height: 100%;
+}
+.service-description:hover {
+  background-color: #e0e0e030;
+}
+
+.service-description_icon {
+  height: 70px;
+  width: auto;
+  vertical-align: middle;
+}
+
+.service-description_icon img.sd-icon {
+  display: inline;
+  height: 100%;   
+  /* background: #a0a0a010; */
+  border-radius: 2px;
+  border: 1px orange dashed;
+}
+
+.service-description_title h3 {
+  font-size: 20px;
 }
 
 .file-upload-box_when_dropping {
   border: dashed grey 4px;
   background-color: rgba(255,255,255,.8);
-  position: static;
+  position: fixed;
   display: block;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  margin: 20px;
   z-index: 999;
 }
 
@@ -23,10 +83,34 @@
   max-height: 100%;
   max-width: 100%;
 }
-.select-image-button {
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+.select-image-input {
   position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
   display: block;
-  margin: auto;
 }
 .crop-box {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+
+
+.ReactCrop__drag-handle::after{
+  width: 20px;
+  height: 20px;
 }

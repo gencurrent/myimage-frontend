@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { v4 as uuidv4 } from 'uuid';
 
 class DragAndDrop extends React.Component {
 
@@ -9,6 +10,7 @@ class DragAndDrop extends React.Component {
         this.state = {
             dragging: false
         }
+        this.htmlElementUuid = uuidv4();
     }
 
     handleDrag = (e) => {
@@ -26,6 +28,7 @@ class DragAndDrop extends React.Component {
     }
     
     handleDragOut = (e) => {
+        console.log(`Dragging out`);
         e.preventDefault();
         e.stopPropagation();
         this.dragCounter--;
@@ -62,13 +65,13 @@ class DragAndDrop extends React.Component {
         }
     }
 
-
     componentDidMount(){
         let div = this.dropRef.current;
-        div.addEventListener('dragenter', this.handleDragIn)
-        div.addEventListener('dragout', this.handleDragOut)
-        div.addEventListener('dragover', this.handleDrag)
-        div.addEventListener('drop', this.handleDrop)
+        div.addEventListener('dragenter', this.handleDragIn);
+        div.addEventListener('dragout', this.handleDragOut);
+        div.addEventListener('dragleave', this.handleDragOut);
+        div.addEventListener('dragover', this.handleDrag);
+        div.addEventListener('drop', this.handleDrop);
         this.dragCounter = 0;
     }
 
@@ -76,16 +79,16 @@ class DragAndDrop extends React.Component {
         let div = this.dropRef.current;
         div.removeEventListener('dragenter', this.handleDragIn)
         div.removeEventListener('dragout', this.handleDragOut)
+        div.removeEventListener('dragleave', this.handleDragOut);
         div.removeEventListener('dragover', this.handleDrag)
         div.removeEventListener('drop', this.handleDrop)
     }
 
     render(){
-        console.log(`this.props -> `, this.props)
         const {className} = this.props || '';
         return (
             <div 
-                className={`file-upload-box ${className}`}
+                className={`file-upload-box col-lg-8 col-sm-12 d-flex ${className}`}
                 ref={this.dropRef}>
                 {this.state.dragging &&
                 <div className='file-upload-box_when_dropping'
@@ -105,13 +108,20 @@ class DragAndDrop extends React.Component {
                     </div>
                 </div>
                 }
-                 <input
-                    className='select-image-button'
-                    type="file"
-                    // style={{ display: "none" }}
-                    onChange={this.handleImageSelect}
-                />
-                {this.props.children}
+                <label className="btn btn-primary btn-file mx-auto my-auto" htmlFor={this.htmlElementUuid}>
+                    Browse <input
+                        className='select-image-input'
+                        type="file"
+                        id={this.htmlElementUuid}
+                        accept=".jpg,.jpeg,.gif,.png"
+                        // style={{ display: "none" }}
+                        onChange={this.handleImageSelect}
+                        hidden
+                    />
+                </label>
+
+                {/* <label for={this.htmlElementUuid}>Choose an image</label> */}
+                {/* {this.props.children} */}
             </div>
         )
     }

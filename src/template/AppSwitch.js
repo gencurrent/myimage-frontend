@@ -5,7 +5,9 @@ import {
     Switch
 } from 'react-router-dom';
 
-import PageCrop from 'page/PageCrop';
+import PageCropMultipleFormats from 'page/PageCropMultipleFormats';
+import PageCropSingle from 'page/PageCropSingle';
+import PageAbout from 'page/PageAbout';
 import Main from 'page/Main';
 
 class AppSwitch extends React.Component {
@@ -13,13 +15,25 @@ class AppSwitch extends React.Component {
         return (
             <Switch>
 
-                <Route path='/crop-bulk'>
-                    <PageCrop/>
+                <Route path='/crop-multiple-formats'>
+                    <PageCropMultipleFormats/>
+                </Route>
+
+                <Route path='/crop-image'>
+                    <PageCropSingle/>
+                </Route>
+
+                <Route exact path='/about'>
+                    <PageAbout/>
                 </Route>
 
                 <Route path='/'>
                     <Main/>
                 </Route>
+
+                {/* <Route>
+                    <Main/>
+                </Route> */}
                 
             </Switch>
         )

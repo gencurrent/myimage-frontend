@@ -3,8 +3,9 @@ import axios from 'axios';
 
 import DragAndDrop from 'components/DragAndDrop';
 import Cropper from 'components/Cropper';
+import TitleSubtitle from 'components/TitleSubtitle';
 
-class PageCrop extends React.Component {
+class PageCropMultipleFormats extends React.Component {
     
     constructor(props){
         super(props);
@@ -13,28 +14,29 @@ class PageCrop extends React.Component {
             fileRaw: null,
             croppers: {},   // uuid: {}
         }
+        this.addCropper = this.addCropper.bind(this);
         this.handleDrop = this.handleDrop.bind(this);
         this.onCroppingUpdated = this.onCroppingUpdated.bind(this);
+        this.onCropRequiredClicked = this.onCropRequiredClicked.bind(this);
         this.handleDownload = this.handleDownload.bind(this);
         this.removeCropper = this.removeCropper.bind(this);
 
         // Temp
         this.formats = [
             {
-                name: 'Instagram post',
-                aspect: 1.91,
-            },
-            {
-                name: 'Instagram Post',
-                aspect: 0.5,
-            },
-            {
-                name: 'FaceBook Post',
-                aspect: 2.5,
-            },
-            {
+                slug: 'custom-format',
                 name: 'Custom format',
                 aspect: undefined,
+            },
+            {
+                slug: 'instagram-post',
+                name: 'Instagram Post',
+                aspect: 4/5,
+            },
+            {
+                slug: 'facebook-post',
+                name: 'FaceBook Post',
+                aspect: 2.5,
             },
         ]
     }
@@ -49,42 +51,23 @@ class PageCrop extends React.Component {
 
 
     onCroppingUpdated = (cropperUuid, cropData) => {
-        console.log('onCroppingUpdated -> this.state.croppers -> ', this.state.croppers)
-        console.log(cropperUuid)
-        console.log(cropData);
         let croppers = this.state.croppers;
         croppers[cropperUuid].crop = cropData;
 
         this.setState({
             croppers: croppers
         });
-
-        axios.put('/api/cropper/crop-data',
-            Object.keys(croppers).map(cropper => croppers[cropper].crop)
-        )
-            .then(response => {
-                console.log(`onCroppingUpdated ->`, response)
-                // let croppers = this.state.croppers;
-            })
     }
 
-    addCropper = (formatName) => {
-        const formatSelection = this.formats.find(e => e.name === formatName)
-        console.log(`Added the format`, formatSelection);
-        // let croppers = this.state.croppers;
-        axios.post('/api/cropper/crop-data',
-        {
-            format: formatSelection
-        }
-        )
+    addCropper = () => {
+        axios.post('/api/cropper/crop-data',{})
             .then(response => {
-
-                console.log(`onCroppingUpdated ->`, response)
                 let croppers = this.state.croppers;
                 const uuidResponse = response.data.uuid;
                 croppers[uuidResponse] = {
-                    format: formatSelection
+                    format: this.formats[0]
                 };
+                console.log(`addCropper -> this.state.croppers `, this.state.croppers)
                 this.setState({
                     croppers: croppers
                 })
@@ -113,8 +96,41 @@ class PageCrop extends React.Component {
         
         let formData = new FormData();
         formData.append('image', this.state.fileRaw);
+        const croppers = this.state.croppers;
         axios.post(
-            '/api/cropper/crop-image', 
+            `/api/cropper/set-data`,
+            croppers
+        ).then(
+            () => {
+                axios.post(
+                    '/api/cropper/crop-images',
+                    formData, 
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    }
+                )
+                .then(resp => {
+                    console.log(`handleDownload -> this.state.croppers `, this.state.croppers)
+                })
+            }
+        )
+        
+    }
+
+    onCropRequiredClicked = (cropUuid, fullData) => {
+        
+        let formData = new FormData();
+        formData.append('image', this.state.fileRaw);
+        const cropper = this.state.croppers[cropUuid];
+        console.log(`onCropRequiredClicked -> this.state.croppers`, this.state.croppers);
+        axios.post(
+            `/api/cropper/set-data/${cropUuid}`,
+            cropper
+        ).then(
+            () => axios.post(
+            `/api/cropper/crop-image/${cropUuid}`, 
             formData, 
             {
                 headers: {
@@ -123,9 +139,14 @@ class PageCrop extends React.Component {
             }
             )
             .then(resp => {
-                console.log(`returned from file uploading`);
+                console.log(`onCropRequiredClicked -> cropping`, resp);
+                // const link = document.createElement('a');
+                // link.href = `your_link.pdf`;
+                // document.body.appendChild(link);
+                // link.click();
+                // document.body.removeChild(link);
             })
-            
+        )
     }
 
     render(){
@@ -134,10 +155,10 @@ class PageCrop extends React.Component {
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12 text-center">
-                        
-                        <div>
-                            Please, upload a file below
-                        </div>
+                        <TitleSubtitle 
+                            title="Bulk crop images for multiple formats" 
+                            subtitle="Use the tool for getting multiple crops from JPG, PNG or GIF"
+                        />
                         <div className="mx-auto">
                             <DragAndDrop className="mx-auto" handleDrop={this.handleDrop}>
                                 <div style={{'min-height': '300px', 'min-width': '250px'}}>
@@ -148,31 +169,19 @@ class PageCrop extends React.Component {
                             </DragAndDrop>
                         </div>
 
-                        <div>
-                            Crop the file below
-                        </div>
-
-                        {this.state.file && 
-                            this.formats.map(format => 
-                                <button
-                                    key={format.name}
-                                    className='btn btn-primary' 
-                                    onClick={e => this.addCropper(format.name)}
-                                >
-                                    Add {format.name}
-                                </button>
+                        {this.state.file &&
+                            <button
                                 
-                            )
+                                className='btn btn-primary' 
+                                onClick={e => this.addCropper()}
+                            >Add cropping</button>
                         }
 
                         <div>
                             { this.state.file &&  this.state.croppers &&
                                 Object.keys(this.state.croppers).map(cropperUuid => {
-                                    console.log(this.state.croppers);
                                     const cropper = this.state.croppers[cropperUuid];
-                                    console.log(`Cropper udpated ->`, cropper);
-                                    let formatSelection = this.formats.find(e => (e.name === cropper.format.name))
-                                    console.log(formatSelection);
+                                    let formatSelection = this.formats.find(e => (e.slug === cropper.format.slug))
                                     return (
 
                                         <div className="row">
@@ -181,11 +190,12 @@ class PageCrop extends React.Component {
                                                 <Cropper 
                                                     className="mx-auto"
                                                     image={this.state.file}
-                                                    format={cropper.format}
+                                                    formats={this.formats}
                                                     uuid={cropperUuid}
+                                                    onCropRequiredClicked={this.onCropRequiredClicked}
                                                     onCroppingUpdated={this.onCroppingUpdated}
-                                                    removeCropper={this.removeCropper}
-                                                // getCropInfo={this.getCropInfo}
+                                                    removeButton
+                                                    onCropperRemoveButtonClicked={this.removeCropper}
                                                 />
                                                 
                                             </div>
@@ -194,19 +204,12 @@ class PageCrop extends React.Component {
                                 })
                             }
                         </div>
-                        <div>
-                            Download the file
-                        </div>
-                        <button 
-                            disabled={this.state.file === null}
-                            onClick={this.handleDownload}
-                        >
-                            Crop
-                        </button>
-
-
-
-                
+                        {this.state.file && Object.keys(this.state.croppers).length > 0 && 
+                            <button
+                                className='btn btn-primary'
+                                onClick={this.handleDownload}
+                            >Crop</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -214,4 +217,4 @@ class PageCrop extends React.Component {
     }
 };
 
-export default PageCrop;
+export default PageCropMultipleFormats;
