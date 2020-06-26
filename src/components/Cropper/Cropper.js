@@ -110,7 +110,10 @@ class Cropper extends React.Component {
             image_height: this.reactCrop.current.imageRef.clientHeight,
             image_width: this.reactCrop.current.imageRef.clientWidth,
         }
-        this.props.onCropRequiredClicked(this.props.uuid, fullData);
+        
+        if(this.props.onCropRequiredClicked){
+            this.props.onCropRequiredClicked(this.props.uuid, fullData);
+        }
     }
 
     selectFormat = selectedFormatOption => {

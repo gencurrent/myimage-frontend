@@ -27,7 +27,7 @@ class AppSwitch extends React.Component {
                     <PageAbout/>
                 </Route>
 
-                <Route path='/'>
+                <Route exact path='/'>
                     <Main/>
                 </Route>
 

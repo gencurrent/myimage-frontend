@@ -11,6 +11,7 @@ class PageCropSingle extends React.Component {
         this.handleDrop = this.handleDrop.bind(this);
         this.imageDropped = this.imageDropped.bind(this);
         this.onCroppingUpdated = this.onCroppingUpdated.bind(this);
+        this.onCropRequiredClicked = this.onCropRequiredClicked.bind(this);
 
         this.format = {
             slug: 'custom-format',
@@ -55,14 +56,40 @@ class PageCropSingle extends React.Component {
         this.setState({
             croppers: croppers
         });
+    }
 
-        axios.put('/api/cropper/crop-data',
-            Object.keys(croppers).map(cropper => croppers[cropper].crop)
-        )
-            .then(response => {
-                console.log(`onCroppingUpdated ->`, response)
-                // let croppers = this.state.croppers;
+
+    onCropRequiredClicked = (cropUuid, fullData) => {
+        
+        let formData = new FormData();
+        formData.append('image', this.state.fileRaw);
+        const cropper = this.state.croppers[cropUuid];
+
+        axios.post(
+            `/api/cropper/set-data/${cropUuid}`,
+            cropper
+        ).then(
+            () => axios.post(
+            `/api/cropper/crop-image/${cropUuid}`, 
+            formData, 
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+            )
+            .then(resp => {
+
+                const url = resp.data.url;
+                const link = document.createElement('a');
+                link.href = url;
+                // link.target = '_blank';
+                link.download = this.state.fileRaw.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             })
+        )
     }
 
     render(){
@@ -83,6 +110,7 @@ class PageCropSingle extends React.Component {
                                         formats={[this.format]}
                                         uuid={cropperUuid}
                                         onCroppingUpdated={this.onCroppingUpdated}
+                                        onCropRequiredClicked={this.onCropRequiredClicked}
                                     /> 
                                 })}
                                 

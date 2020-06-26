@@ -12,6 +12,7 @@ RUN npm install react-scripts@3.4.1 -g --silent
 COPY . ./
 RUN npm run build
 
-RUN mkdir -p /shared/nginx/html
-RUN ls -alh
-RUN cp -r /app/build /shared/nginx/html
+RUN mkdir -p /shared/nginx/static/
+RUN mkdir -p /shared/nginx/html/
+
+CMD ./run.sh

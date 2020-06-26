@@ -139,12 +139,14 @@ class PageCropMultipleFormats extends React.Component {
             }
             )
             .then(resp => {
-                console.log(`onCropRequiredClicked -> cropping`, resp);
-                // const link = document.createElement('a');
-                // link.href = `your_link.pdf`;
-                // document.body.appendChild(link);
-                // link.click();
-                // document.body.removeChild(link);
+                const url = resp.data.url;
+                const link = document.createElement('a');
+                link.href = url;
+                // link.target = '_blank';
+                link.download = this.state.fileRaw.name;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             })
         )
     }

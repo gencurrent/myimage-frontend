@@ -1,10 +1,28 @@
 const { createProxyMiddleware } = require('http-proxy-middleware');
-module.exports = function(app) {
+module.exports = (app) => {
+  if (process.env.NODE_ENV === 'production'){
+    return;
+  }
   app.use(
     '/api',
     createProxyMiddleware({
-      target: 'http://127.0.0.1:8000',
+      target: `http://${process.env.REACT_APP_API_URL}`,
       changeOrigin: true,
+    })
+  );
+
+  app.use(
+    '/public',
+    createProxyMiddleware({
+      target: `http://${process.env.REACT_APP_API_URL}`,
+      changeOrigin: false,
+    })
+  );
+  app.use(
+    '/shared',
+    createProxyMiddleware({
+      target: `http://${process.env.REACT_APP_API_URL}`,
+      changeOrigin: false,
     })
   );
 };
