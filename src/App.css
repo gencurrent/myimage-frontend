@@ -1,4 +1,7 @@
-
+:root {
+  --main-bg-color: linear-gradient(180deg, rgba(1,0,36,1) 0%, rgba(8,42,90,1) 70%, rgba(17,13,120,1) 100%);
+  --main-bg-color-simple: rgba(8,42,90,1);
+}
 
  /* Main page */
 
@@ -32,7 +35,39 @@ a.link-unstyled {
   text-decoration: none;
 }
 
+/* Bootstrap redefinition */
+.navbar {
+  background: rgb(1,0,36);
+  background: linear-gradient(180deg, rgba(1,0,36,1) 0%, rgba(8,42,90,1) 70%, rgba(17,13,120,1) 100%); 
+  /* background: rgb(2,36,0);
+  background: linear-gradient(180deg, rgba(2,36,0,1) 0%, rgba(10,90,8,1) 70%, rgba(13,120,18,1) 100%);  */
+}
 
+.navbar-light .navbar-brand {
+  border: 1px white solid;
+  border-radius: 5px;
+  padding: 4px;
+  font-weight: 600;
+}
+
+.navbar .navbar-brand a{
+  color: white;
+}
+.navbar .navbar-nav .nav-link {
+  color: white;
+}
+
+.navbar-dark .navbar-toggler {
+  border-color: rgba(255,255,255,.5);
+}
+
+.btn-primary {
+  background: rgb(1,0,36);
+  background: linear-gradient(180deg, rgba(1,0,36,1) 0%, rgba(8,42,90,1) 70%, rgba(17,13,120,1) 100%); 
+}
+
+
+/* Custom components */
 .file-upload-box {
   /* width: 400px; */
   height: 150px;
@@ -114,3 +149,52 @@ a.link-unstyled {
   width: 20px;
   height: 20px;
 }
+
+/* Resizer */
+.component-resizer > img{
+  max-width: 100%;
+}
+
+
+/* ToolHelperForm */
+
+.tool-helper-panel {
+  display: none;
+  position: absolute;
+  border: 1.5px solid var(--main-bg-color-simple);
+  border-radius: 4px;
+  right: 0;
+  top: 0;
+  left: 10%;
+}
+
+.tool-helper-panel.expanded {
+  display: block;
+}
+
+.tool-helper-form {
+  background: white;
+  padding-top: 10px;
+  padding-bottom: 2px;
+}
+
+/* ToolHelper */
+
+.tool-helper {    position: absolute;
+  cursor: pointer;
+  right: 5px;
+  background: var(--main-bg-color);
+  border-radius: 2px;
+  z-index: 9999;
+  max-width: 40px;
+  display: flex;
+}
+
+.tool-helper.expanded {
+  left: 10%;
+}
+
+.tool-helper > img {
+  margin: 3px;
+}
+

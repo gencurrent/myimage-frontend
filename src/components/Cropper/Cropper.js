@@ -95,8 +95,8 @@ class Cropper extends React.Component {
             () => {
                 const fullData = {
                     ...this.state.crop,
-                    image_height: this.reactCrop.current.imageRef.clientHeight,
-                    image_width: this.reactCrop.current.imageRef.clientWidth,
+                    image_height: this.reactCrop.current.imageRef.naturalHeight,
+                    image_width: this.reactCrop.current.imageRef.naturalWidth,
                 }
                 this.props.onCroppingUpdated(this.props.uuid, fullData);
             }
@@ -136,10 +136,11 @@ class Cropper extends React.Component {
             <div className={`crop-box ${this.props.className || ''}`}>
                 <div className='crop-box-controls d-flex flex-row'>
                     { (this.props.formats.length > 1) && this.formatSelectOptions && 
-                        <Select 
+                        <Select
                             className='col-lg-10 col-sm-10'
                             options={this.formatSelectOptions}
                             value={this.state.selectedFormatOption}
+                            isSearchable={false}
                             onChange={this.selectFormat}
                         />
                     }
@@ -153,7 +154,7 @@ class Cropper extends React.Component {
                         src={this.props.image}
                         crop={this.state.crop}
                         onChange={newCrop => this.updateCrop(newCrop)}
-                        // onImageLoaded={this.onLoad}
+                    // onImageLoaded={this.onLoad}
                     />
                 }
                 <button className='btn btn-primary' onClick={this.downloadThisCrop}>Download this crop

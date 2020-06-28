@@ -29,14 +29,34 @@ class PageCropMultipleFormats extends React.Component {
                 aspect: undefined,
             },
             {
-                slug: 'instagram-post',
-                name: 'Instagram Post',
+                slug: 'square',
+                name: 'Square (1:1)',
+                aspect: 1,
+            },
+            {
+                slug: 'instagram-post-square',
+                name: 'Instagram Post (square)',
+                aspect: 1,
+            },
+            {
+                slug: 'instagram-post-portrait',
+                name: 'Instagram Post (portrait)',
                 aspect: 4/5,
+            },
+            {
+                slug: 'instagram-post-landscape',
+                name: 'Instagram Post (landscape)',
+                aspect: 1.91,
+            },
+            {
+                slug: 'instagram-story',
+                name: 'Instagram, FaceBook Story',
+                aspect: 1080 / 1920,
             },
             {
                 slug: 'facebook-post',
                 name: 'FaceBook Post',
-                aspect: 2.5,
+                aspect: 1200 / 628,
             },
         ]
     }
@@ -210,7 +230,7 @@ class PageCropMultipleFormats extends React.Component {
                             <button
                                 className='btn btn-primary'
                                 onClick={this.handleDownload}
-                            >Crop</button>
+                            >Crop all and download zip</button>
                         }
                     </div>
                 </div>

@@ -12,6 +12,7 @@ import {
 
 import BottomLine from 'components/BottomLine';
 import AppSwitch from './AppSwitch';
+import Config from 'config';
 
 import Logo from 'resources/logo.png';
 
@@ -19,17 +20,18 @@ class MainTemplate extends React.Component {
     render(){
         return (
             <Router>
-                <Navbar bg="light" expand="lg">
+                <Navbar variant="dark" bg="dark" expand="lg">
 
                 <Link className="navbar-brand" to="/">
                     <img height="30" src={Logo}/>
                 </Link>
-                <Navbar.Brand><Link to='/'>AB-images</Link></Navbar.Brand>
+                <Navbar.Brand><Link to='/'>{Config.APPLICATION_NAME}</Link></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Link className="nav-link" to='/'>Home</Link>
                         <Link className="nav-link" to='/crop-image'>Crop image</Link>
+                        <Link className="nav-link" to='/resize-image'>Resize image</Link>
                         <Link className="nav-link" to='/crop-multiple-formats'>Bulk cropping</Link>
                         <Link className="nav-link" to='/about'>About</Link>
                     </Nav>

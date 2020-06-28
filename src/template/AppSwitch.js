@@ -7,6 +7,7 @@ import {
 
 import PageCropMultipleFormats from 'page/PageCropMultipleFormats';
 import PageCropSingle from 'page/PageCropSingle';
+import PageResizeSingle from 'page/PageResizeSingle';
 import PageAbout from 'page/PageAbout';
 import Main from 'page/Main';
 
@@ -17,6 +18,10 @@ class AppSwitch extends React.Component {
 
                 <Route path='/crop-multiple-formats'>
                     <PageCropMultipleFormats/>
+                </Route>
+
+                <Route path='/resize-image'>
+                    <PageResizeSingle/>
                 </Route>
 
                 <Route path='/crop-image'>

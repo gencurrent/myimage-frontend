@@ -6,6 +6,7 @@ import {
 
 import TitleSubtitle from 'components/TitleSubtitle';
 import IconCropSingle from 'resources/icon-crop-single.png';
+import IconResizeSingle from 'resources/icon-resize-single.png';
 import IconCropMultiformat from 'resources/icon-crop-multiformat.png';
 
 
@@ -33,6 +34,15 @@ class Main extends React.Component {
                                                     </div>
                                                     <div className='service-description_title'><h3 className=''>Crop image</h3></div>
                                                     <div className='service-description_description'>Use visual editor or define size in pixels to crop your image and download it</div>
+                                                </div>
+                                            </Link>
+                                            <Link className='link-unstyled col-lg-4 col-sm-12' to='/resize-image'>
+                                                <div className='service-description'>
+                                                    <div className='service-description_icon'>
+                                                        <img className='sd-icon' alt='icon-crop-single' src={IconResizeSingle}/>
+                                                    </div>
+                                                    <div className='service-description_title'><h3 className=''>Resize image</h3></div>
+                                                    <div className='service-description_description'>Select image, define image size in pixels, and resize it</div>
                                                 </div>
                                             </Link>
                                             <Link className='link-unstyled col-lg-4 col-sm-12' to='/crop-multiple-formats'>

@@ -2,4 +2,7 @@
  * Application configureation
  */
 
-export const ApplicationName = 'MyImage.io';
+
+export default {
+    APPLICATION_NAME: "MyImage.io",
+}
