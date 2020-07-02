@@ -11,17 +11,17 @@ import {
 class ToolHelperFormResize extends React.Component {
 
     static propTypes = {
-        resizeTarget: PropTypes.object.isRequired,
+        resizeConfiguration: PropTypes.object.isRequired,
         onValuesUpdated: PropTypes.func.isRequired,
     }
 
     constructor(props){
         super(props);
 
-        const {resizeTarget} = this.props;
+        const {resizeConfiguration} = this.props;
         this.state = {
-            width: this.props.resizeTarget.width,
-            height: this.props.resizeTarget.height,
+            width: this.props.resizeConfiguration.width,
+            height: this.props.resizeConfiguration.height,
             keepAspect: true,
         };
         this.onValuesUpdated();
@@ -33,8 +33,8 @@ class ToolHelperFormResize extends React.Component {
         
         let extension = {};
         if (this.state.keepAspect){
-            const diffRatio = value / this.props.resizeTarget.width;
-            const newHeight = Math.round(this.props.resizeTarget.height * diffRatio);
+            const diffRatio = value / this.props.resizeConfiguration.width;
+            const newHeight = Math.round(this.props.resizeConfiguration.height * diffRatio);
             extension.height = newHeight;
         }
 
@@ -50,8 +50,8 @@ class ToolHelperFormResize extends React.Component {
         
         let extension = {};
         if (this.state.keepAspect){
-            const diffRatio = value / this.props.resizeTarget.height;
-            const newWidth = Math.round(this.props.resizeTarget.width * diffRatio);
+            const diffRatio = value / this.props.resizeConfiguration.height;
+            const newWidth = Math.round(this.props.resizeConfiguration.width * diffRatio);
             extension.width = newWidth;
         }
         
@@ -68,8 +68,8 @@ class ToolHelperFormResize extends React.Component {
         let newSizeState = {};
         if (!this.state.keepAspect){
             newSizeState = {
-                width: this.props.resizeTarget.width,
-                height: this.props.resizeTarget.height,
+                width: this.props.resizeConfiguration.width,
+                height: this.props.resizeConfiguration.height,
             };
         }
         

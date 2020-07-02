@@ -6,9 +6,9 @@ export const setAxiosDefaults = () => {
 }
 
 export const initSystem = () => {
-    if (process.env === 'production') {
-        const noop = () => {};
-        console.log = noop;
-        console.warn = noop;
-    }    
+    // if (process.env === 'production') {
+    //     const noop = () => {};
+    //     console.log = noop;
+    //     console.warn = noop;
+    // }    
 }

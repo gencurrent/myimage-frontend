@@ -4,6 +4,10 @@ import ReactCrop from 'react-image-crop';
 
 import 'react-image-crop/dist/ReactCrop.css';
 import Select from 'react-select';
+import {
+    ArrowDownCircleFill,
+    DashCircleFill,
+} from 'react-bootstrap-icons';
 
 class Cropper extends React.Component {
 
@@ -93,10 +97,11 @@ class Cropper extends React.Component {
         this.setState(
             {crop: newCrop}, 
             () => {
+                console.log(`The image data = `, this.reactCrop.current.imageRef);
                 const fullData = {
                     ...this.state.crop,
-                    image_height: this.reactCrop.current.imageRef.naturalHeight,
-                    image_width: this.reactCrop.current.imageRef.naturalWidth,
+                    image_height: this.reactCrop.current.imageRef.clientHeight,
+                    image_width: this.reactCrop.current.imageRef.clientWidth,
                 }
                 this.props.onCroppingUpdated(this.props.uuid, fullData);
             }
@@ -104,7 +109,7 @@ class Cropper extends React.Component {
     }
 
     downloadThisCrop = () => {
-
+        console.log(`The image data = `, this.reactCrop.current.imageRef);
         const fullData = {
             ...this.state.crop,
             image_height: this.reactCrop.current.imageRef.clientHeight,
@@ -134,31 +139,44 @@ class Cropper extends React.Component {
     render(){
         return (
             <div className={`crop-box ${this.props.className || ''}`}>
-                <div className='crop-box-controls d-flex flex-row'>
-                    { (this.props.formats.length > 1) && this.formatSelectOptions && 
-                        <Select
-                            className='col-lg-10 col-sm-10'
-                            options={this.formatSelectOptions}
-                            value={this.state.selectedFormatOption}
-                            isSearchable={false}
-                            onChange={this.selectFormat}
-                        />
-                    }
-                    {this.props.removeButton && 
-                        <button className=" col-lg-2 col-sm-2 btn btn-danger p-2" onClick={this.removeCropper}>Remove</button>
-                    }
+                <div className='container my-1'>
+                    
+                    <div className='crop-box-controls row'>
+                        { (this.props.formats.length > 1) && this.formatSelectOptions && 
+                            <Select
+                                className='col-lg-10 col-sm-10'
+                                options={this.formatSelectOptions}
+                                value={this.state.selectedFormatOption}
+                                isSearchable={false}
+                                onChange={this.selectFormat}
+                            />
+                        }
+                        {this.props.removeButton && 
+                            <div className='col-lg-2 col-sm-2'>
+                                <button className="btn btn-danger w-100" onClick={this.removeCropper}><DashCircleFill size={24}/> Remove</button>
+                            </div>
+                        }
+                    </div>
                 </div>
                 {this.props.image && 
-                    <ReactCrop
-                        ref={this.reactCrop}
-                        src={this.props.image}
-                        crop={this.state.crop}
-                        onChange={newCrop => this.updateCrop(newCrop)}
-                    // onImageLoaded={this.onLoad}
-                    />
+                    <div className='container'>
+                        <div className='row'>
+                            <div className='col-12'>
+                                <ReactCrop
+                                    ref={this.reactCrop}
+                                    src={this.props.image}
+                                    crop={this.state.crop}
+                                    onChange={newCrop => this.updateCrop(newCrop)}
+                                // onImageLoaded={this.onLoad}
+                                />
+                            </div>
+                            <div className='col-lg-12'>
+                                <button className='btn btn-primary float-right' onClick={this.downloadThisCrop}><ArrowDownCircleFill size={24}/> Download this crop</button>
+                            </div>
+                        </div>
+                    </div>
                 }
-                <button className='btn btn-primary' onClick={this.downloadThisCrop}>Download this crop
-                </button>
+
             </div>
         )
     }

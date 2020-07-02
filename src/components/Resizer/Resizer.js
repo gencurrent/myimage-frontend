@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 class Resizer extends React.Component {
 
     static propTypes = {
-        imageSource: PropTypes.string.isRequired
+        imageSources: PropTypes.string.isRequired,
+        uuid: PropTypes.string.isRequired,
     }
 
     constructor(props){
@@ -16,25 +17,29 @@ class Resizer extends React.Component {
         };
     }
 
-    onImageLoaded = (e) => {
+    onImageLoaded = (e, fileUuid) => {
         const image = e.target;
         const size = {
             height: image.naturalHeight,
             width: image.naturalWidth,
         }
-        this.props.onImageLoaded && this.props.onImageLoaded(size);
+        console.log(`onImageLoaded -> size `, size);
+        this.props.onImageLoaded && this.props.onImageLoaded(fileUuid, size);
     }
 
     render() {
         return(
-            <div className='component-resizer'>
-                <img
-                    onLoad={this.onImageLoaded}
-                    ref={this.imgRef} 
-                    src={this.props.imageSource}
-                />
-                
-            </div>
+            <>
+                {Object.keys(this.props.imageSources).map(fileUuid =>
+                    (<div className='component-resizer'>
+                        <img
+                            onLoad={(e) => {this.onImageLoaded(e, fileUuid)}}
+                            ref={this.imgRef} 
+                            src={this.props.imageSources[fileUuid].file}
+                        />
+                    </div>))
+                }
+            </>
         );
     }
 };
