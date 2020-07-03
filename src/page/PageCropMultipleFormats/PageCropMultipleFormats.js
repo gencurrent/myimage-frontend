@@ -6,7 +6,7 @@ import Cropper from 'components/Cropper';
 import TitleSubtitle from 'components/TitleSubtitle';
 import {
     PlusCircle,
-    ArrowDownCircleFill
+    Files
 } from 'react-bootstrap-icons';
 
 class PageCropMultipleFormats extends React.Component {

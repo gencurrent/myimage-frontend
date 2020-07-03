@@ -5,6 +5,9 @@ import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import Select from 'react-select';
 import {
+    Spinner
+} from 'react-bootstrap';
+import {
     ArrowDownCircleFill,
     DashCircleFill,
 } from 'react-bootstrap-icons';
@@ -142,7 +145,7 @@ class Cropper extends React.Component {
                 <div className='container my-1'>
                     
                     <div className='crop-box-controls row'>
-                        { (this.props.formats.length > 1) && this.formatSelectOptions && 
+                        { (this.props.formats.length > 1) && this.formatSelectOptions &&
                             <Select
                                 className='col-lg-10 col-sm-10'
                                 options={this.formatSelectOptions}
@@ -171,7 +174,14 @@ class Cropper extends React.Component {
                                 />
                             </div>
                             <div className='col-lg-12'>
-                                <button className='btn btn-primary float-right' onClick={this.downloadThisCrop}><ArrowDownCircleFill size={24}/> Download this crop</button>
+                                {/* <React.Component.Spinner animation="border" role="status" /> */}
+                                <button className='btn btn-primary float-right' onClick={this.downloadThisCrop}>
+                                {this.props.downloading ? 
+                                    <><Spinner size='sm' animation="border" role="status"/> Downloading</>
+                                    :
+                                    <><ArrowDownCircleFill size={24}/> Download this crop</>
+                                }
+                                </button>
                             </div>
                         </div>
                     </div>

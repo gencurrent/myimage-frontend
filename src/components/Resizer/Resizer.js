@@ -30,15 +30,24 @@ class Resizer extends React.Component {
     render() {
         return(
             <>
-                {Object.keys(this.props.imageSources).map(fileUuid =>
-                    (<div className='component-resizer'>
-                        <img
-                            onLoad={(e) => {this.onImageLoaded(e, fileUuid)}}
-                            ref={this.imgRef} 
-                            src={this.props.imageSources[fileUuid].file}
-                        />
-                    </div>))
-                }
+            <div className='container'>
+                <div className='row'>
+                    {Object.keys(this.props.imageSources).map(fileUuid =>
+                        (<div className='component-resizer col-lg-4'>
+                            <div className='component-resizer-square mx-auto'>
+                                <div className='resizer-container'>
+                                    <img
+                                        className='resizer-image'
+                                        onLoad={(e) => {this.onImageLoaded(e, fileUuid)}}
+                                        ref={this.imgRef} 
+                                        src={this.props.imageSources[fileUuid].file}
+                                    />
+                                </div>
+                            </div>
+                        </div>))
+                    }
+                </div>
+            </div>
             </>
         );
     }

@@ -1,12 +1,16 @@
 import React from 'react';
 import axios from 'axios';
+import { withAlert } from 'react-alert';
 
 import DragAndDrop from 'components/DragAndDrop';
 import Cropper from 'components/Cropper';
+import TitleSubtitle from 'components/TitleSubtitle';
+
 
 class PageCropSingle extends React.Component {
     constructor(props){
         super(props);
+        console.log(`this.props = `, this.props);
 
         this.handleDrop = this.handleDrop.bind(this);
         this.imageDropped = this.imageDropped.bind(this);
@@ -64,6 +68,12 @@ class PageCropSingle extends React.Component {
         let formData = new FormData();
         formData.append('image', this.state.fileRaw);
         const cropper = this.state.croppers[cropUuid];
+        cropper.downloading = true;
+        const croppers = this.state.croppers;
+        croppers[cropUuid] = cropper;
+        this.setState({
+            croppers: {...croppers}
+        })
 
         axios.post(
             `/api/cropper/set-data/${cropUuid}`,
@@ -79,49 +89,69 @@ class PageCropSingle extends React.Component {
             }
             )
             .then(resp => {
-
+                console.log(this.state);
                 const url = resp.data.url;
                 const link = document.createElement('a');
                 link.href = url;
-                // link.target = '_blank';
                 link.download = this.state.fileRaw.name;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+                
+                const croppers = this.state.croppers;
+                croppers[cropUuid].downloading = false;
+                this.setState({croppers: croppers});
+            })
+            .catch( error => {
+                const croppers = this.state.croppers;
+                croppers[cropUuid].downloading = false;
+                this.setState({croppers: croppers});
+
+                this.props.alert.error('Something went wrong 😕');
             })
         )
     }
 
     render(){
         return (
-            <div className="container">
+            <div className="container text-center">
+
+                <div className='row text-center'>
+                    <div className='col-12'>
+
+                        <TitleSubtitle
+                            title="Crop single image tool"
+                            subtitle="Use the tool for cropping  JPG, PNG or GIF"
+                        />
+                    </div>
+                </div>
+
                 <div className="row">
-                    <div className="col-lg-12 text-center">
-                        <div className="mx-auto">
-                            <DragAndDrop className="mx-auto" handleDrop={this.handleDrop} />
-                        </div>
+                    <div className="col-lg-12 text-center mx-auto">
+                        <DragAndDrop className="mx-auto" handleDrop={this.handleDrop} />
+                    </div>
+                </div>
 
-                        <div className="row">
-                            <div className="col-lg-12">
-                                {this.state.file && Object.keys(this.state.croppers).map(cropperUuid => {
-                                    return <Cropper 
-                                        className="mx-auto"
-                                        image={this.state.file}
-                                        formats={[this.format]}
-                                        uuid={cropperUuid}
-                                        onCroppingUpdated={this.onCroppingUpdated}
-                                        onCropRequiredClicked={this.onCropRequiredClicked}
-                                    /> 
-                                })}
-                                
-                            </div>
-                        </div>
-
+                <div className="row">
+                    <div className="col-lg-10 mx-auto">
+                        {this.state.file && Object.keys(this.state.croppers).map(cropperUuid => {
+                            const cropper = this.state.croppers[cropperUuid]
+                            return <Cropper 
+                                className="mx-auto"
+                                image={this.state.file}
+                                formats={[this.format]}
+                                uuid={cropperUuid}
+                                onCroppingUpdated={this.onCroppingUpdated}
+                                onCropRequiredClicked={this.onCropRequiredClicked}
+                                downloading={cropper.downloading}
+                            /> 
+                        })}
                     </div>
                 </div>
             </div>
+
         )
     }
 };
 
-export default PageCropSingle;
+export default withAlert()(PageCropSingle);

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 
+import { positions as AlertPosition, Provider as AlertProvider } from "react-alert";
+import AlertTemplate from "react-alert-template-basic";
+
 import store from './redux';
 
 // import PageCrop from './page/PageCrop';
@@ -13,16 +16,20 @@ import {initSystem, setAxiosDefaults } from './system';
 initSystem();
 setAxiosDefaults();
 
+const alertOptions = {
+  timeout: 4000,
+  position: AlertPosition.BOTTOM_CENTER
+}
+
 function App() {
   return (
     <Provider store={store}>
-      
-      
-      <div className="App">
-        <MainTemplate/>
-        {/* <PageCrop/> */}
-      
-      </div>
+      {/* Error Provider */}
+      <AlertProvider template={AlertTemplate} {...alertOptions}>
+        <div className="App">
+          <MainTemplate/>
+        </div>
+      </AlertProvider>
     </Provider>
   );
 }

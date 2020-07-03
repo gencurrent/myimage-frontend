@@ -1,6 +1,10 @@
 import React from 'react';
 
+
 import { v4 as uuidv4 } from 'uuid';
+import {
+    Files
+} from 'react-bootstrap-icons';
 
 class DragAndDrop extends React.Component {
 
@@ -109,7 +113,7 @@ class DragAndDrop extends React.Component {
                 </div>
                 }
                 <label className="btn btn-primary btn-file mx-auto my-auto" htmlFor={this.htmlElementUuid}>
-                    Browse <input
+                    <Files size={24}/> Browse <input
                         className='select-image-input'
                         type="file"
                         id={this.htmlElementUuid}
