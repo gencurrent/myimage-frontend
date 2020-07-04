@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 import axios from 'axios';
 import {
@@ -110,6 +111,12 @@ class PageResizeSingle extends React.Component {
     
     render(){
         return (
+            <>
+            <Helmet>
+                <title>MyImage.io | Resize images fast, simple and free</title>
+                <meta name='description' content="Resize your JPG, PNG or GIF images fast, simple and free with MyImage.io resizer tool. Define pixels to set desired dimensions."/>
+            </Helmet>
+
             <ContainerSingle className='text-center'>
 
                 <TitleSubtitle
@@ -154,9 +161,8 @@ class PageResizeSingle extends React.Component {
                 }
                 </div>
                 </div>
-
-                
             </ContainerSingle>
+            </>
         )
     }
 };

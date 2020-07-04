@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Helmet } from 'react-helmet';
 
 class Resizer extends React.Component {
 
@@ -30,6 +31,13 @@ class Resizer extends React.Component {
     render() {
         return(
             <>
+
+            <Helmet>
+                <meta charSet="utf-8"/>
+                <title>MyImage.io | Resize images fast, simple and free</title>
+                <meta name='description' content="Easy and efficient way to modify your images with a set of tools: crop/cut, resize, format, crop with multiple formats and other image changing tools."/>
+                <link rel='canonical' href='https://myimage.io'/>
+            </Helmet>
             <div className='container'>
                 <div className='row'>
                     {Object.keys(this.props.imageSources).map(fileUuid =>

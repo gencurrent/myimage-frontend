@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 import { withAlert } from 'react-alert';
 
 import DragAndDrop from 'components/DragAndDrop';
@@ -114,6 +115,12 @@ class PageCropSingle extends React.Component {
 
     render(){
         return (
+            <>
+
+            <Helmet>
+                <title>MyImage.io | Crop images fast, simple and free</title>
+                <meta name='description' content="Crop your single JPG, PNG or GIF image fast, simple and free with MyImage.io cropper tool. Just drag area on an image and download cut result."/>
+            </Helmet>
             <div className="container text-center">
 
                 <div className='row text-center'>
@@ -149,7 +156,7 @@ class PageCropSingle extends React.Component {
                     </div>
                 </div>
             </div>
-
+            </>
         )
     }
 };

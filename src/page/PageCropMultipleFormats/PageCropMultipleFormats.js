@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
 
 import DragAndDrop from 'components/DragAndDrop';
 import Cropper from 'components/Cropper';
@@ -177,7 +178,12 @@ class PageCropMultipleFormats extends React.Component {
 
     render(){
         return (
-        
+            <>
+            <Helmet>
+                <title>MyImage.io | Crop one image with multiple size formats fast, simple and free</title>
+                <meta name='description' content="Crop your JPG, PNG or GIF images to multiple aspects/ratios at the same time. Just upload a single image and add popular formats to cut the image."/>
+            </Helmet>
+
             <div className="container">
                 <div className="row">
                     <div className="col-lg-12 text-center">
@@ -269,6 +275,7 @@ class PageCropMultipleFormats extends React.Component {
                     </div>
                 </div>
             </div>
+            </>
         )
     }
 };
