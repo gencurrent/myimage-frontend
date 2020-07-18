@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
+import { withAlert } from 'react-alert';
 
 import DragAndDrop from 'components/DragAndDrop';
 import Cropper from 'components/Cropper';
@@ -17,13 +18,14 @@ class PageCropMultipleFormats extends React.Component {
         this.state = {
             file: null,
             fileRaw: null,
-            croppers: {},   // uuid: {}
+            croppers: {},   // {key: string - operation UUID, value: Object{} - cropper}
+            opUuid: null, // Base Operation UUID
         }
         this.addCropper = this.addCropper.bind(this);
-        this.handleDrop = this.handleDrop.bind(this);
+        this.onDrop = this.onDrop.bind(this);
         this.onCroppingUpdated = this.onCroppingUpdated.bind(this);
         this.onCropRequiredClicked = this.onCropRequiredClicked.bind(this);
-        this.handleDownload = this.handleDownload.bind(this);
+        this.onActionButtonClicked = this.onActionButtonClicked.bind(this);
         this.removeCropper = this.removeCropper.bind(this);
 
         // Temp
@@ -66,30 +68,34 @@ class PageCropMultipleFormats extends React.Component {
         ]
     }
 
-    handleDrop = (file, fileRaw) => {
-        this.setState({
-            file: file, 
-            fileRaw: fileRaw,
-            croppers: {},
-        });
+    onDrop = (file, fileRaw) => {
+        // Fix it to acquire the opUuid at the moment of clicking an Action Button
+        axios.get('/api/system/set-ops/crop-multiformat')
+            .then(resp => {
+                this.setState({
+                    file: file,
+                    fileRaw: fileRaw,
+                    croppers: {},
+                    opUuid: resp.data.uuid
+                });
+            })
     }
 
 
     onCroppingUpdated = (cropperUuid, cropData) => {
         let croppers = this.state.croppers;
         croppers[cropperUuid].crop = cropData;
-
         this.setState({
             croppers: croppers
         });
     }
 
     addCropper = () => {
-        axios.post('/api/cropper/crop-data',{})
+        axios.get('/api/system/set-ops/crop')
             .then(response => {
                 let croppers = this.state.croppers;
-                const uuidResponse = response.data.uuid;
-                croppers[uuidResponse] = {
+                const opUuid = response.data.uuid;
+                croppers[opUuid] = {
                     format: this.formats[0]
                 };
                 console.log(`addCropper -> this.state.croppers `, this.state.croppers)
@@ -98,7 +104,7 @@ class PageCropMultipleFormats extends React.Component {
                 })
             })
             .catch(err => {
-                
+                this.props.alert.error('Something went wrong 😕');
             })
     }
 
@@ -114,36 +120,37 @@ class PageCropMultipleFormats extends React.Component {
     }
     
 
-
-    handleDownload(e) {
+    // Download all crops on the page
+    onActionButtonClicked(e) {
         e.preventDefault();
-        console.log(`handleCrop -> this.state.croppers`, this.state.croppers);
-        
         let formData = new FormData();
         formData.append('image', this.state.fileRaw);
         const croppers = this.state.croppers;
         axios.post(
-            `/api/cropper/set-data`,
+            `/api/cropper/crop-images/set-data/${this.state.opUuid}`,
             croppers
         ).then(
             () => {
                 axios.post(
-                    '/api/cropper/crop-images',
-                    formData, 
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        }
-                    }
+                    `/api/cropper/crop-images/${this.state.opUuid}`,
+                    formData,
+                    {headers: {'Content-Type': 'multipart/form-data'}}
                 )
                 .then(resp => {
-                    console.log(`handleDownload -> this.state.croppers `, this.state.croppers)
+                    console.log(`onActionButtonClicked -> this.state.croppers `, this.state.croppers)
+                })
+                .catch(err => {
+                    this.props.alert.error('Something went wrong 😕');
                 })
             }
         )
+        .catch(err => {
+            this.props.alert.error('Something went wrong 😕');
+        })
         
     }
 
+    // Download a single crop result
     onCropRequiredClicked = (cropUuid, fullData) => {
         
         let formData = new FormData();
@@ -151,23 +158,18 @@ class PageCropMultipleFormats extends React.Component {
         const cropper = this.state.croppers[cropUuid];
         console.log(`onCropRequiredClicked -> this.state.croppers`, this.state.croppers);
         axios.post(
-            `/api/cropper/set-data/${cropUuid}`,
-            cropper
+            `/api/cropper/crop-image/set-data/${cropUuid}`,
+            cropper.crop
         ).then(
             () => axios.post(
-            `/api/cropper/crop-image/${cropUuid}`, 
-            formData, 
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
+                `/api/cropper/crop-image/${cropUuid}`, 
+                formData, 
+                {headers: {'Content-Type': 'multipart/form-data'}}
             )
             .then(resp => {
                 const url = resp.data.url;
                 const link = document.createElement('a');
                 link.href = url;
-                // link.target = '_blank';
                 link.download = this.state.fileRaw.name;
                 document.body.appendChild(link);
                 link.click();
@@ -180,7 +182,7 @@ class PageCropMultipleFormats extends React.Component {
         return (
             <>
             <Helmet>
-                <title>MyImage.io | Crop one image with multiple size formats fast, simple and free</title>
+                <title>Crop image with multiple size formats Fast, Free, Simple | MyImage.io</title>
                 <meta name='description' content="Crop your JPG, PNG or GIF images to multiple aspects/ratios at the same time. Just upload a single image and add popular formats to cut the image."/>
             </Helmet>
 
@@ -196,7 +198,7 @@ class PageCropMultipleFormats extends React.Component {
                             <div className="container">
                                 <div className="row">
                                     <div className="col-lg-12 text-center">
-                                        <DragAndDrop className="mx-auto" handleDrop={this.handleDrop}>
+                                        <DragAndDrop className="mx-auto" handleDrop={this.onDrop}>
                                             <div style={{'min-height': '300px', 'min-width': '250px'}}>
                                                 { this.state.fileRaw && 
                                                 <img alt="uploaded image" className="drop-box_image-loaded" />
@@ -267,7 +269,7 @@ class PageCropMultipleFormats extends React.Component {
                                 <div className='col-lg-12'>
                                     <button
                                         className='btn btn-lg btn-primary'
-                                        onClick={this.handleDownload}
+                                        onClick={this.onActionButtonClicked}
                                     >Crop all and download zip</button>
                                 </div>
                             </div>
@@ -280,4 +282,4 @@ class PageCropMultipleFormats extends React.Component {
     }
 };
 
-export default PageCropMultipleFormats;
+export default withAlert()(PageCropMultipleFormats);

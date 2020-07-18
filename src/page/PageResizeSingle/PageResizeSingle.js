@@ -1,7 +1,7 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
-
 import axios from 'axios';
+import { Helmet } from 'react-helmet';
+import { withAlert } from 'react-alert';
 import {
     Button
 } from 'react-bootstrap';
@@ -13,6 +13,7 @@ import ContainerSingle from 'components/ContainerSingle';
 import ToolHelperFormResize from 'components/ToolHelperForm/ToolHelperFormResize';
 import Resizer from '../../components/Resizer';
 
+import { Redirect } from 'react-router-dom';
 
 class PageResizeSingle extends React.Component {
 
@@ -20,10 +21,11 @@ class PageResizeSingle extends React.Component {
         super(props);
 
         this.state = {
-            stateFiles: {},
+            stateFiles: {}, // All uploaded files
             resizeTo: {},
             resizeConfiguration: {},    // Resize state
             opUuid: null,   // Operation UUID (must be initialized before any requests)
+            redirectResult: null,
         }
     }
 
@@ -42,22 +44,20 @@ class PageResizeSingle extends React.Component {
 
     // Set state after an image has been loaded to the <img ... /> of the Resizer component
     setInitialSize = (fileUuid, size) => {
-        console.log(`Image ${fileUuid} loaded: size = `, size);
         this.setState({
             resizeConfiguration:
                 Object.keys(this.state.resizeConfiguration).length === 0 ?
                     size
                     :
                     this.state.resizeConfiguration,
-        }, () => {console.log(`setInitialSize :: Updated state = `, this.state)});
+        });
     }
 
     // The values in the ToolHelper form have been updated
     onResizeValuesUpdated = (resizeTo) => {
-        console.log(`onResizeValuesUpdated -> `, resizeTo)
         this.setState({
             resizeTo: resizeTo
-        }, () => {console.log(`Resize Values updated`, this.state)});
+        });
     }
 
 
@@ -75,6 +75,7 @@ class PageResizeSingle extends React.Component {
         });
 
 
+        // post all the collected data
         const postData = () => {
             if (!this.state.opUuid){
                 throw Error(`Operation key is not set: ${this.state.opUuid}`);
@@ -89,9 +90,18 @@ class PageResizeSingle extends React.Component {
                     formData
                 )
                 .then(resp => {
-                    console.log(`Succesfull cropping:`, resp);
+                    console.log(`Succesfull resizing:`, resp);
+                    this.setState({
+                        redirectResult: true
+                    })
                 })
-            );
+                .catch( error => {
+                    this.props.alert.error('Something went wrong 😕');
+                })
+            )
+            .catch( error => {
+                this.props.alert.error('Something went wrong 😕');
+            });
         }
 
         // Set system UUID
@@ -101,6 +111,9 @@ class PageResizeSingle extends React.Component {
                     this.setState({
                         opUuid: response.data.uuid
                     }, () => {console.log(`Updated opUuid: `, this.state.opUuid); postData()} );
+                })
+                .catch( error => {
+                    this.props.alert.error('Something went wrong 😕');
                 });
         }
         else {
@@ -113,7 +126,7 @@ class PageResizeSingle extends React.Component {
         return (
             <>
             <Helmet>
-                <title>MyImage.io | Resize images fast, simple and free</title>
+                <title>Resize images Fast, Simple, Free | MyImage.io</title>
                 <meta name='description' content="Resize your JPG, PNG or GIF images fast, simple and free with MyImage.io resizer tool. Define pixels to set desired dimensions."/>
             </Helmet>
 
@@ -151,7 +164,6 @@ class PageResizeSingle extends React.Component {
                         <Resizer 
                             imageSources={this.state.stateFiles}
                             onImageLoaded={this.setInitialSize}
-                            
                         />
                         <Button
                         variant='primary'
@@ -161,10 +173,15 @@ class PageResizeSingle extends React.Component {
                 }
                 </div>
                 </div>
+                {this.state.redirectResult && 
+                    <Redirect to={{
+                        pathname: `/result/resize/${this.state.opUuid}`
+                    }}/>
+                }
             </ContainerSingle>
             </>
         )
     }
 };
 
-export default PageResizeSingle;
+export default withAlert()(PageResizeSingle);

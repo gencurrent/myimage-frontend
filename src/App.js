@@ -31,12 +31,12 @@ function App() {
 
           <Helmet>
             <meta charSet="utf-8"/>
-            <title>MyImage.io | Edit images the fast and simple way for free</title>
+            <title>Edit images Free, Fast, Simple | MyImage.io</title>
             <meta name='description' content="Easy and efficient way or modify your images with a set of tools: crop/cut, resize, format, crop with multiple formats and other image changing tools"/>
             <link rel='canonical' href='https://myimage.io'/>
           </Helmet>
           <MainTemplate/>
-          
+
         </div>
       </AlertProvider>
     </Provider>
