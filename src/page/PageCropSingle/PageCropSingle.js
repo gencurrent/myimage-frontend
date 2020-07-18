@@ -76,7 +76,6 @@ class PageCropSingle extends React.Component {
                     formData
                 )
                 .then(resp => {
-                    console.log(`Succesfull cropping:`, resp);
                     const url = resp.data.url;
                     const link = document.createElement('a');
                     link.href = url;

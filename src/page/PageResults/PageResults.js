@@ -19,9 +19,6 @@ class PageResults extends React.Component {
 
     constructor(props){
         super(props);
-        console.log(`this.props -> `);
-        console.log(props);
-        console.log(this);
         const {match: {params}} = this.props;
         this.params = params;
         this.fetchResults()
@@ -46,6 +43,15 @@ class PageResults extends React.Component {
                 })
                 console.error(`Oops: something went wrong:`, err);
             })
+    }
+
+    onDownloadSingleRequired = (result) => {
+        const link = document.createElement('a');
+        link.href = `/${result.public}`;
+        link.download = result.filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     render() {
@@ -73,9 +79,10 @@ class PageResults extends React.Component {
                                                     <div className='row'>
                                                         <div className='col-12'>
                                                             <div className='page-results_image-container'>
-                                                                <img src={`/${result.public}`} className='page-results_image_container' alt={`Image output`} />
+                                                                <img src={`/${result.public}`} className='page-results_image-result' alt={`Image output`} />
+                                                                {/* <img src={`/${result.public}`} className='page-results_image-container' alt={`Image output`} /> */}
                                                             </div>
-                                                            <Button>Download</Button>
+                                                            <Button onClick={() => {this.onDownloadSingleRequired(result)}}>Download</Button>
                                                         </div>
                                                     </div>
                                                 )
