@@ -77,12 +77,14 @@ class PageResults extends React.Component {
                                                 const result = this.state.results[resultKey];
                                                 return (
                                                     <div className='row'>
-                                                        <div className='col-12'>
+                                                        <div className='col-12 my-2'>
                                                             <div className='page-results_image-container'>
                                                                 <img src={`/${result.public}`} className='page-results_image-result' alt={`Image output`} />
                                                                 {/* <img src={`/${result.public}`} className='page-results_image-container' alt={`Image output`} /> */}
                                                             </div>
-                                                            <Button onClick={() => {this.onDownloadSingleRequired(result)}}>Download</Button>
+                                                            <div className='my-1'>
+                                                                        <Button onClick={() => {this.onDownloadSingleRequired(result)}}>Download</Button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )

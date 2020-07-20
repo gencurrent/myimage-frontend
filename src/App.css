@@ -227,16 +227,17 @@ a.link-unstyled {
 
 .page-results_image-container {
   height: 400px;
-  width: 400px;
-  text-align: center;
-  margin: auto;
+  /* width: 400px; */
+  /* text-align: center; */
+  /* margin: auto; */
   position: relative;
-  text-align: initial;
+  /* text-align: initial; */
 }
 
 .page-results_image-result {
   height: inherit;
-  width: inherit;
-  margin: auto;
+  /* width: inherit; */
+  /* margin: auto; */
   object-fit: contain;
+  max-width: 100%;
 }
