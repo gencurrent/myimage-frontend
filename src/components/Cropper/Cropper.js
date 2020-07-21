@@ -22,8 +22,9 @@ class Cropper extends React.Component {
         onCroppingUpdated: PropTypes.func.isRequired,
         uuid: PropTypes.string,
         onCropperRemoveButtonClicked: PropTypes.func,
-        removeButton: PropTypes.bool,
-        downloading: PropTypes.bool, // Is currently downloading state on the Download button
+        removeButton: PropTypes.bool,       // Display button "Remove"
+        downloading: PropTypes.bool,        // Is currently downloading state on the Download button
+        showButtonDownload: PropTypes.bool, // Display button "Download"
     }
 
     constructor(props){
@@ -184,16 +185,18 @@ class Cropper extends React.Component {
                                 // onImageLoaded={this.onLoad}
                                 />
                             </div>
-                            <div className='col-lg-12'>
-                                {/* <React.Component.Spinner animation="border" role="status" /> */}
-                                <button className='btn btn-primary float-right' onClick={this.downloadThisCrop}>
-                                {this.props.downloading ? 
-                                    <><Spinner size='sm' animation="border" role="status"/> Downloading</>
-                                    :
-                                    <><ArrowDownCircleFill size={24}/> Download this crop</>
-                                }
-                                </button>
-                            </div>
+                            { this.props.showButtonDownload && 
+                                <div className='col-lg-12'>
+                                    {/* <React.Component.Spinner animation="border" role="status" /> */}
+                                    <button className='btn btn-primary float-right' onClick={this.downloadThisCrop}>
+                                    {this.props.downloading ? 
+                                        <><Spinner size='sm' animation="border" role="status"/> Downloading</>
+                                        :
+                                        <><ArrowDownCircleFill size={24}/> Download this crop</>
+                                    }
+                                    </button>
+                                </div>
+                            }
                         </div>
                     </div>
                 }

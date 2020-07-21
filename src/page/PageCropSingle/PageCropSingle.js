@@ -89,15 +89,6 @@ class PageCropSingle extends React.Component {
                         this.setState({
                             redirectResult: true
                         })
-                        // const url = resp.data.url;
-                        // const link = document.createElement('a');
-                        // link.href = url;
-                        // link.download = this.state.fileRaw.name;
-                        // document.body.appendChild(link);
-                        // link.click();
-                        // document.body.removeChild(link);
-                        
-                        this.setState({cropper: {...this.state.cropper, downloading: false}});
                     })
                     .catch( error => {
                         this.setState({croppers: {...this.state.cropper, downloading: false}});

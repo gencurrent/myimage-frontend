@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import { Helmet } from 'react-helmet';
 import { withAlert } from 'react-alert';
+import { Redirect } from 'react-router-dom';
 
 import DragAndDrop from 'components/DragAndDrop';
 import Cropper from 'components/Cropper';
@@ -137,7 +138,10 @@ class PageCropMultipleFormats extends React.Component {
                     {headers: {'Content-Type': 'multipart/form-data'}}
                 )
                 .then(resp => {
-                    console.log(`onActionButtonClicked -> this.state.croppers `, this.state.croppers)
+                    console.log(`onActionButtonClicked -> this.state.croppers `, this.state.croppers);
+                    this.setState({
+                        redirectResult: true
+                    })
                 })
                 .catch(err => {
                     this.props.alert.error('Something went wrong 😕');
@@ -277,6 +281,12 @@ class PageCropMultipleFormats extends React.Component {
                     </div>
                 </div>
             </div>
+
+            {this.state.redirectResult && 
+                <Redirect to={{
+                    pathname: `/result/crop-multiformat/${this.state.opUuid}`
+                }}/>
+            }
             </>
         )
     }
