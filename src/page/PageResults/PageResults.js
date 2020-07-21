@@ -80,7 +80,6 @@ class PageResults extends React.Component {
                                                         <div className='col-12 my-2'>
                                                             <div className='page-results_image-container'>
                                                                 <img src={`/${result.public}`} className='page-results_image-result' alt={`Image output`} />
-                                                                {/* <img src={`/${result.public}`} className='page-results_image-container' alt={`Image output`} /> */}
                                                             </div>
                                                             <div className='my-1'>
                                                                         <Button onClick={() => {this.onDownloadSingleRequired(result)}}>Download</Button>

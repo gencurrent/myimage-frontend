@@ -77,7 +77,7 @@ class PageCropMultipleFormats extends React.Component {
                     fileRaw: fileRaw,
                     croppers: {},
                     opUuid: resp.data.uuid
-                });
+                }, () => {this.addCropper()});
             })
     }
 

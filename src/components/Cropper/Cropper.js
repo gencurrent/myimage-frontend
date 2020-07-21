@@ -23,6 +23,7 @@ class Cropper extends React.Component {
         uuid: PropTypes.string,
         onCropperRemoveButtonClicked: PropTypes.func,
         removeButton: PropTypes.bool,
+        downloading: PropTypes.bool, // Is currently downloading state on the Download button
     }
 
     constructor(props){
@@ -122,6 +123,16 @@ class Cropper extends React.Component {
         if(this.props.onCropRequiredClicked){
             this.props.onCropRequiredClicked(this.props.uuid, fullData);
         }
+    }
+    
+    getFullData = () => {
+        console.log(`The full image data = `, this.reactCrop.current.imageRef);
+        const fullData = {
+            ...this.state.crop,
+            image_height: this.reactCrop.current.imageRef.clientHeight,
+            image_width: this.reactCrop.current.imageRef.clientWidth,
+        }
+        return fullData;
     }
 
     selectFormat = selectedFormatOption => {
