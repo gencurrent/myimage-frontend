@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import { withAlert } from 'react-alert';
 import { Helmet } from 'react-helmet';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
 import { 
     Button 
 } from 'react-bootstrap';

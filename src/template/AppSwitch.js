@@ -5,9 +5,13 @@ import {
     Switch
 } from 'react-router-dom';
 
+import PageEditForInstagram from 'page/PageEditFor/PageEditForInstagram';
+import PageEditForApplication from 'page/PageEditFor/PageEditForApplication';
+
 import PageCropMultipleFormats from 'page/PageCropMultipleFormats';
 import PageCropSingle from 'page/PageCropSingle';
 import PageResizeSingle from 'page/PageResizeSingle';
+import PageEditFor from 'page/PageEditFor';
 import PageAbout from 'page/PageAbout';
 import PageResults from 'page/PageResults';
 import Main from 'page/Main';
@@ -27,6 +31,14 @@ class AppSwitch extends React.Component {
 
                 <Route path='/crop-image'>
                     <PageCropSingle/>
+                </Route>
+
+                <Route path='/edit-for/:forApplication'>
+                    <PageEditForApplication/>
+                </Route>
+
+                <Route path='/edit-for'>
+                    <PageEditFor/>
                 </Route>
 
                 // TODO: Finish URL parameter for results

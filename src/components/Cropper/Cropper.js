@@ -33,13 +33,22 @@ class Cropper extends React.Component {
             unit: '%',
             width: 30,
         }
-        
+
         this.formatSelectOptions = this.formFormatOptions();
         const formatOptionDefault = this.formatSelectOptions[0];
+
+        // Image aspect
+        const formatSelected = this.formatOptionToFormat(formatOptionDefault);
+        let aspect = formatSelected.aspect;
+        const sizeTarget = formatSelected.sizeTarget;   // Ideal image size described in the format object
+        if (sizeTarget !== undefined){
+            aspect =  sizeTarget.width / sizeTarget.height;
+        }
+
         this.state = {
             selectedFormatOption: formatOptionDefault,
             crop: {
-                aspect: this.formatOptionToFormat(formatOptionDefault).aspect,
+                aspect: aspect,
                 unit: '%',
                 width: 30,
             }
@@ -137,9 +146,18 @@ class Cropper extends React.Component {
     }
 
     selectFormat = selectedFormatOption => {
+        // Image aspect
+        const formatSelected = this.formatOptionToFormat(selectedFormatOption);
+        let aspect = formatSelected.aspect;
+        const sizeTarget = formatSelected.sizeTarget;   // Ideal image size described in the format object
+        if (sizeTarget !== undefined){
+            aspect =  sizeTarget.width / sizeTarget.height;
+        }
+
+        console.log(`Format Selected = `, formatSelected);
         const crop = {
             ...this.defaultCropProperties,
-            aspect: this.formatOptionToFormat(selectedFormatOption).aspect
+            aspect: aspect
         }
         this.setState({
             selectedFormatOption: selectedFormatOption,
@@ -152,6 +170,12 @@ class Cropper extends React.Component {
     }
 
     render(){
+        
+        let formatSelectColumnWidth  = 12;
+        if (this.props.removeButton) {
+            formatSelectColumnWidth -= 2;
+        }
+        const formatSelectColStyles = `col-lg-${formatSelectColumnWidth} col-sm-${formatSelectColumnWidth}`;
         return (
             <div className={`crop-box ${this.props.className || ''}`}>
                 <div className='container my-1'>
@@ -159,7 +183,7 @@ class Cropper extends React.Component {
                     <div className='crop-box-controls row'>
                         { (this.props.formats.length > 1) && this.formatSelectOptions &&
                             <Select
-                                className='col-lg-10 col-sm-10'
+                                className={formatSelectColStyles}
                                 options={this.formatSelectOptions}
                                 value={this.state.selectedFormatOption}
                                 isSearchable={false}

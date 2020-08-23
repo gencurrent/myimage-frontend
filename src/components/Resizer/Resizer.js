@@ -24,7 +24,6 @@ class Resizer extends React.Component {
             height: image.naturalHeight,
             width: image.naturalWidth,
         }
-        console.log(`onImageLoaded -> size `, size);
         this.props.onImageLoaded && this.props.onImageLoaded(fileUuid, size);
     }
 

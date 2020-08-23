@@ -27,7 +27,7 @@ class Main extends React.Component {
 
                                         <div className='row'>
 
-                                            <Link className='link-unstyled col-lg-4 col-sm-12 my-3' to='/crop-image'>
+                                            <Link className='link-unstyled col-lg-4 col-sm-12' to='/crop-image'>
                                                 <div className='service-description'>
                                                     <div className='service-description_icon'>
                                                         <img className='sd-icon' alt='icon-crop-single' src={IconCropSingle}/>

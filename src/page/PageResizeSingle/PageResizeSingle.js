@@ -90,7 +90,6 @@ class PageResizeSingle extends React.Component {
                     formData
                 )
                 .then(resp => {
-                    console.log(`Succesfull resizing:`, resp);
                     this.setState({
                         redirectResult: true
                     })
@@ -110,7 +109,7 @@ class PageResizeSingle extends React.Component {
                 .then(response => {
                     this.setState({
                         opUuid: response.data.uuid
-                    }, () => {console.log(`Updated opUuid: `, this.state.opUuid); postData()} );
+                    }, () => {postData();} );
                 })
                 .catch( error => {
                     this.props.alert.error('Something went wrong 😕');
@@ -127,7 +126,7 @@ class PageResizeSingle extends React.Component {
             <>
             <Helmet>
                 <title>Resize images Fast, Simple, Free | MyImage.io</title>
-                <meta name='description' content="Resize your JPG, PNG or GIF images fast, simple and free with MyImage.io resizer tool. Define pixels to set desired dimensions."/>
+                <meta name='description' content="Resize your JPG, PNG or GIF images fast, simple and free with MyImage.io resizer tool. Define pixels to set desired dimensions"/>
             </Helmet>
 
             <ContainerSingle className='text-center'>

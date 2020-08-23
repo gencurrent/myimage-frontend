@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 import ContainerSingle from 'components/ContainerSingle';
 import TitleSubtitle from 'components/TitleSubtitle';
@@ -7,7 +8,10 @@ class PageAbout extends React.Component {
     render(){
         return (
             <ContainerSingle className='text-center'>
-                
+                <Helmet>
+                    <title>About MyImage.io</title>
+                    <meta name='description' content="About the myimage.io web service: why we see the things another way"/>
+                </Helmet>
                 <TitleSubtitle 
                     title="About myimage.io" 
                     subtitle="We keep things being simple"

@@ -41,7 +41,7 @@ class ToolHelperFormResize extends React.Component {
         this.setState({
             width: number,
             ...extension,
-        }, this.onValuesUpdated())
+        }, this.onValuesUpdated);
     }
 
     onHeightInput = (e) => {
@@ -58,13 +58,10 @@ class ToolHelperFormResize extends React.Component {
         this.setState({
             height: number,
             ...extension
-        }, this.onValuesUpdated())
+        }, this.onValuesUpdated);
     }
 
     onKeepAspectInput = e => {
-        console.log(`this.state`, this.state);
-        console.log(`checkbox event`, e);
-        console.log('checkbox', e.target);
         let newSizeState = {};
         if (!this.state.keepAspect){
             newSizeState = {

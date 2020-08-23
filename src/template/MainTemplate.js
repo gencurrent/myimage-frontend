@@ -33,6 +33,7 @@ class MainTemplate extends React.Component {
                         <Link className="nav-link" to='/crop-image'>Crop image</Link>
                         <Link className="nav-link" to='/resize-image'>Resize image</Link>
                         <Link className="nav-link" to='/crop-multiple-formats'>Bulk cropping</Link>
+                        <Link className="nav-link" to='/edit-for'>Edit for</Link>
                         <Link className="nav-link" to='/about'>About</Link>
                     </Nav>
                 </Navbar.Collapse>
